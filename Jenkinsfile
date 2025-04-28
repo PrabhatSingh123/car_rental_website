@@ -2,11 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/PrabhatSingh123/car_rental_website'
-            }
-        }
+        
 
         stage('Install Dependencies') {
             steps {
