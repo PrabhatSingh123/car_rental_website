@@ -2,42 +2,35 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Clone Repository') {
             steps {
-           
                 git 'https://github.com/PrabhatSingh123/car_rental_website'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                
                 bat 'npm install'
             }
         }
 
-        stage('Build') {
+        stage('Build React App') {
             steps {
-               
                 bat 'npm run build'
             }
         }
 
         stage('Docker Build') {
             steps {
-                
-                bat 'docker build -t my-react-app .'
+                bat 'docker build -t car-rental-app .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                
-                bat 'docker stop my-react-app || echo No container'
-              
-                bat 'docker rm my-react-app || echo No container'
-              
-                bat 'docker run -d -p 8080:80 --name my-react-app my-react-app'
+                bat 'docker stop car-rental-app || echo "No container to stop"'
+                bat 'docker rm car-rental-app || echo "No container to remove"'
+                bat 'docker run -d -p 8080:80 --name car-rental-app car-rental-app'
             }
         }
     }
