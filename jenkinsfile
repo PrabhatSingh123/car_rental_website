@@ -1,42 +1,43 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = 'my-react-app'
-        DOCKER_REGISTRY = 'docker.io'
-    }
-
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/PrabhatSingh123/car_rental_website'
+           
+                git 'https://github.com/PrabhatSingh123/car_rental_website'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                script {
-                    sh 'npm install'
-                }
+                
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                script {
-                    sh 'npm run build'
-                }
+               
+                bat 'npm run build'
             }
         }
 
-        stage('Deploy') {
+        stage('Docker Build') {
             steps {
-                echo 'Deploying to Docker...'
-                // Build Docker image
-                sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE .'
                 
-                // Run Docker container
-                sh 'docker run -d -p 3000:3000 $DOCKER_REGISTRY/$DOCKER_IMAGE'
+                bat 'docker build -t my-react-app .'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                
+                bat 'docker stop my-react-app || echo No container'
+              
+                bat 'docker rm my-react-app || echo No container'
+              
+                bat 'docker run -d -p 8080:80 --name my-react-app my-react-app'
             }
         }
     }
