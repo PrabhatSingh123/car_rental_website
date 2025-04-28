@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'my-react-app'
+        DOCKER_REGISTRY = 'docker.io'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/PrabhatSingh123/car_rental_website'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to Docker...'
+                // Build Docker image
+                sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE .'
+                
+                // Run Docker container
+                sh 'docker run -d -p 3000:3000 $DOCKER_REGISTRY/$DOCKER_IMAGE'
+            }
+        }
+    }
+}
