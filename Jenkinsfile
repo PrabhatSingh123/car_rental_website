@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Build React App') {
+        stage('Build Project') {
             steps {
                 bat 'npm run build'
             }
@@ -22,15 +22,15 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t car-rental-app .'
+                bat 'docker build -t my-app .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                bat 'docker stop car-rental-app || echo "No container to stop"'
-                bat 'docker rm car-rental-app || echo "No container to remove"'
-                bat 'docker run -d -p 8080:80 --name car-rental-app car-rental-app'
+                bat 'docker stop my-app || echo "No container to stop"'
+                bat 'docker rm my-app || echo "No container to remove"'
+                bat 'docker run -d -p 8080:80 --name my-app my-app'
             }
         }
     }
